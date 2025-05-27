@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Blocus.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Blocus"
+    xmlns:views="clr-namespace:Blocus.Views"
+    Title="Blocus"
+    Shell.NavBarIsVisible="False">
+
+    <!-- Главная -->
+    <ShellContent
+        Title="Home"
+        Icon="home.png"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+    <!-- Избранное -->
+    <FlyoutItem Title="Избранное" Icon="favorite.png">
+        <ShellContent
+            Title="Избранное"
+            ContentTemplate="{DataTemplate views:FavoritesView}"
+            Route="Favorites" />
+    </FlyoutItem>
+
+    <!-- Корзина -->
+    <FlyoutItem Title="Корзина" Icon="trash.png">
+        <ShellContent
+            Title="Корзина"
+            ContentTemplate="{DataTemplate views:TrashView}"
+            Route="Trash" />
+    </FlyoutItem>
+
+</Shell>

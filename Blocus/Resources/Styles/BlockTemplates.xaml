@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Blocus.ViewModels"
+    xmlns:helpers="clr-namespace:Blocus.Helpers">
+
+    <!--
+    ==============================
+    ТЕКСТОВЫЙ БЛОК (TEXT BLOCK)
+    ==============================
+    -->
+    <DataTemplate x:Key="TextBlockTemplate" x:DataType="viewmodels:BlockViewModel">
+        <Frame
+            Style="{StaticResource CardStyle}"
+            Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}">
+
+            <!-- Внутри фрейма: скроллируемый вертикальный стек -->
+            <ScrollView Orientation="Vertical">
+                <VerticalStackLayout Spacing="4">
+
+                    <!-- Заголовок блока -->
+                    <Label
+                        Text="{Binding Title}"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#e3e0f3"
+                        Margin="0,0,0,2"
+                        LineBreakMode="WordWrap"
+                        HorizontalOptions="FillAndExpand" />
+
+                    <!-- Контент, только для чтения -->
+                    <Editor
+                        Text="{Binding Content}"
+                        FontSize="15"
+                        TextColor="#c8c8e0"
+                        BackgroundColor="Transparent"
+                        IsReadOnly="True"
+                        HeightRequest="100"
+                        Margin="8,2,0,2"
+                        AutoSize="Disabled" />
+
+                    <!-- Тип блока (для отладки/отображения) -->
+                    <Label
+                        Text="{Binding Type}"
+                        FontSize="12"
+                        TextColor="#9887d6"
+                        Margin="8,0,0,2" />
+
+                    <!-- Кнопки действий (Открыть, добавить, удалить) -->
+                    <HorizontalStackLayout Spacing="6">
+                        <Button
+                            Text="Открыть"
+                            Command="{Binding OpenCommand}"
+                            Style="{StaticResource FabButtonStyle}"
+                            WidthRequest="100"
+                            HeightRequest="50"
+                            FontSize="16" />
+                        <Button
+                            Text="+"
+                            Command="{Binding AddChildBlockCommand}"
+                            Style="{StaticResource FabButtonStyle}"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            FontSize="20" />
+                        <Button
+                            Text="🗑"
+                            Command="{Binding DeleteCommand}"
+                            Style="{StaticResource FabButtonStyle}"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            FontSize="16" />
+                    </HorizontalStackLayout>
+
+                    <!-- Дочерние блоки (отображаются если IsExpanded) -->
+                    <CollectionView
+                        ItemsSource="{Binding Children}"
+                        ItemTemplate="{StaticResource BlockTemplateSelector}"
+                        IsVisible="{Binding IsExpanded}" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+    </DataTemplate>
+
+    <!--
+    ======================================
+    ЧЕКБОКС-БЛОК (CHECKBOX BLOCK)
+    ======================================
+    -->
+    <DataTemplate x:Key="CheckboxBlockTemplate" x:DataType="viewmodels:BlockViewModel">
+        <Frame
+            Style="{StaticResource CardStyle}"
+            Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}">
+
+            <ScrollView Orientation="Vertical">
+                <VerticalStackLayout Spacing="4">
+
+                    <!-- Горизонтальный стек: чекбокс + заголовок -->
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <CheckBox
+                            IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                            Color="#bfaaff"
+                            VerticalOptions="Center" />
+                        <Label
+                            Text="{Binding Title}"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            LineBreakMode="WordWrap"
+                            TextColor="#e3e0e0"
+                            VerticalOptions="Center"
+                            HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <!-- Контент, только для чтения -->
+                    <Editor
+                        Text="{Binding Content}"
+                        FontSize="15"
+                        TextColor="#c8c8e0"
+                        BackgroundColor="Transparent"
+                        IsReadOnly="True"
+                        HeightRequest="68"
+                        Margin="8,2,0,2"
+                        AutoSize="Disabled" />
+
+                    <!-- Дочерние блоки (если есть) -->
+                    <CollectionView
+                        ItemsSource="{Binding Children}"
+                        ItemTemplate="{StaticResource BlockTemplateSelector}"
+                        Margin="12,4,0,0"
+                        IsVisible="{Binding IsExpanded}" />
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+    </DataTemplate>
+
+    <!--
+    ===========================
+    PAGE-БЛОК (PAGE BLOCK)
+    ===========================
+    -->
+    <DataTemplate x:Key="PageBlockTemplate" x:DataType="viewmodels:BlockViewModel">
+        <Frame
+            Style="{StaticResource CardStyle}"
+            Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}">
+
+            <VerticalStackLayout Spacing="4">
+
+                <!-- Заголовок страницы -->
+                <Label
+                    Text="{Binding Title}"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    TextColor="#e3e0f3"
+                    Margin="0,0,0,2"
+                    LineBreakMode="WordWrap"
+                    HorizontalOptions="FillAndExpand" />
+
+                <!-- Контент, только для чтения -->
+                <Editor
+                    Text="{Binding Content}"
+                    FontSize="15"
+                    TextColor="#c8c8e0"
+                    BackgroundColor="Transparent"
+                    IsReadOnly="True"
+                    HeightRequest="68"
+                    Margin="8,2,0,6"
+                    AutoSize="Disabled" />
+
+                <!-- Дочерние блоки, горизонтально (например, "страницы внутри страницы") -->
+                <CollectionView
+                    ItemsSource="{Binding Children}"
+                    ItemTemplate="{StaticResource BlockTemplateSelector}"
+                    Margin="8,2,0,0"
+                    ItemsLayout="HorizontalList"
+                    IsVisible="{Binding IsExpanded}" />
+
+            </VerticalStackLayout>
+        </Frame>
+    </DataTemplate>
+
+    <!--
+    ===========================================
+    СЕЛЕКТОР ШАБЛОНОВ БЛОКОВ (TEMPLATE SELECTOR)
+    ===========================================
+    -->
+    <helpers:BlockTemplateSelector
+        x:Key="BlockTemplateSelector"
+        TextTemplate="{StaticResource TextBlockTemplate}"
+        CheckboxTemplate="{StaticResource CheckboxBlockTemplate}"
+        PageTemplate="{StaticResource PageBlockTemplate}" />
+
+</ResourceDictionary>

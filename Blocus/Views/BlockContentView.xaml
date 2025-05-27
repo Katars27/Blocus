@@ -1,0 +1,91 @@
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Blocus.ViewModels"
+    x:Class="Blocus.Views.BlockContentView"
+    x:DataType="viewmodels:BlockViewModel"
+    x:Name="Root"
+    BackgroundColor="#191920">
+
+    <ScrollView
+        Orientation="Vertical"
+        VerticalScrollBarVisibility="Always"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand">
+
+        <VerticalStackLayout Padding="20,16,20,20" Spacing="16">
+
+            <!-- BACK BUTTON -->
+            <Button
+                Text="⮌"
+                FontSize="19"
+                TextColor="#a49cff"
+                BackgroundColor="Transparent"
+                WidthRequest="38"
+                HeightRequest="38"
+                VerticalOptions="Start"
+                HorizontalOptions="Start"
+                IsVisible="{Binding HasParent}"
+                Command="{Binding GoBackCommand}" />
+
+            <!-- Заголовок -->
+            <Entry
+                Text="{Binding Title, Mode=TwoWay}"
+                FontSize="22"
+                FontAttributes="Bold"
+                TextColor="#EFEFFF"
+                BackgroundColor="Transparent"
+                Margin="0,0,0,6"
+                Placeholder="Заголовок страницы"
+                HorizontalOptions="FillAndExpand"/>
+
+            <!-- Основной контент -->
+            <Editor
+                Text="{Binding Content, Mode=TwoWay}"
+                AutoSize="TextChanges"
+                FontSize="15"
+                BackgroundColor="#232334"
+                TextColor="#fafafc"
+                HeightRequest="160"
+                Margin="0,0,0,4"
+                Placeholder="Содержимое страницы..."
+                HorizontalOptions="FillAndExpand"/>
+
+            <!-- Тип блока -->
+            <Label
+                Text="{Binding Type}"
+                FontSize="11"
+                TextColor="#AFAFDA"
+                Margin="0,0,0,6"
+                HorizontalOptions="Start"/>
+
+            <!-- Список дочерних блоков (горизонтальный) -->
+            <CollectionView
+                ItemsSource="{Binding Children}"
+                IsVisible="{Binding IsExpanded}"
+                SelectionMode="None"
+                ItemTemplate="{StaticResource BlockTemplateSelector}"
+                EmptyView="Нет вложенных блоков"
+                HeightRequest="300"
+                Margin="0,0,0,0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout
+                        Orientation="Horizontal"
+                        ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+
+            <!-- + Добавить подблок -->
+            <Button
+                Text="+ Добавить подблок"
+                Command="{Binding AddChildBlockCommand}"
+                Margin="0,12,0,0"
+                BackgroundColor="#a49cff"
+                TextColor="#232334"
+                FontSize="15"
+                HeightRequest="38"
+                CornerRadius="18"
+                FontAttributes="Bold" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>

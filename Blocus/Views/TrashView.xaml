@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Blocus.ViewModels"
+             xmlns:models="clr-namespace:Blocus.Models"
+             xmlns:local="clr-namespace:Blocus.Views"
+             x:Class="Blocus.Views.TrashView"
+             Title="Корзина">
+
+    <Grid RowSpacing="12" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Поиск -->
+        <Entry x:Name="SearchBox"
+               Placeholder="Поиск по названию..."
+               Text="{Binding SearchText, Mode=TwoWay}"
+               BackgroundColor="#232334"
+               TextColor="#fafafc"
+               Margin="0,0,0,8"
+               FontSize="14"
+               HeightRequest="30"
+               VerticalOptions="Start"/>
+
+        <!-- Список удалённых блоков -->
+        <ScrollView Grid.Row="1"
+                    Orientation="Both"
+                    VerticalScrollBarVisibility="Always"
+                    HorizontalScrollBarVisibility="Always"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    Padding="0">
+            <VerticalStackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+                <Label Text="Корзина"
+                       FontAttributes="Bold"
+                       Style="{StaticResource NavListLabelStyle}"
+                       Margin="0,0,0,12" />
+
+                <!-- Отображаем блоки из корзины -->
+                <BindableLayout.ItemsSource>
+                    <Binding Path="TrashedBlocks" />
+                </BindableLayout.ItemsSource>
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="vm:BlockViewModel">
+                        <local:TrashBlockView />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Кнопки для очистки корзины -->
+        <HorizontalStackLayout Grid.Row="2"
+                               Spacing="8"
+                               HorizontalOptions="Start"
+                               Margin="0,10,0,0">
+            <Button Text="Очистить корзину"
+                    Command="{Binding ClearTrashCommand}"
+                    FontSize="11"
+                    HeightRequest="36"
+                    WidthRequest="120"
+                    BackgroundColor="#aa4444"
+                    TextColor="White"
+                    CornerRadius="18"
+                    FontAttributes="Bold"
+                    Style="{StaticResource FabButtonStyle}" />
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,42 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Цвета -->
+    <Color x:Key="AccentColor">#bfaaff</Color>
+    <Color x:Key="SurfaceAltColor">#242424</Color>
+    <Color x:Key="ShadowColor">#000000</Color>
+
+    <!-- FAB Style -->
+    <Style x:Key="FabButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource AccentColor}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="CornerRadius" Value="24" />
+        <Setter Property="WidthRequest" Value="48" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="Margin" Value="0,8,0,8" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource ShadowColor}" Opacity="0.12" Offset="0,2" Radius="8"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Icon Button Style -->
+    <Style x:Key="IconButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceAltColor}" />
+        <Setter Property="TextColor" Value="#8A8A8A" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="Margin" Value="8,4,0,0" />
+        <Setter Property="FontAttributes" Value="None" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource ShadowColor}" Opacity="0.08" Offset="0,1" Radius="6"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

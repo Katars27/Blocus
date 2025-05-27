@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Blocus.ViewModels"
+    xmlns:views="clr-namespace:Blocus.Views"
+    xmlns:converters="clr-namespace:Blocus.Converters"
+    x:Class="Blocus.Views.NavigationBlockView"
+    x:DataType="viewmodels:BlockViewModel"
+    Padding="4,2">
+
+    <VerticalStackLayout>
+        <HorizontalStackLayout VerticalOptions="Center">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <ImageButton
+          Grid.Column="0"
+          Command="{Binding ToggleExpandCommand}"
+                    Style="{StaticResource NavChevronStyle}"
+          Source="{Binding IsExpanded, Converter={StaticResource BoolToChevronConverter}}"
+          WidthRequest="24" HeightRequest="24"
+          BackgroundColor="Transparent" />
+
+                <Button
+          Grid.Column="1"
+          Text="{Binding Title}"
+          Command="{Binding OpenCommand}"
+          BackgroundColor="Transparent"
+          Style="{StaticResource NavListButtonStyle}" 
+          TextColor="{Binding IsSelected, Converter={StaticResource BoolToNavSelectedTextConverter}}"
+          FontAttributes="{Binding IsSelected, Converter={StaticResource BoolToFontWeightConverter}}"
+          Padding="8,4"
+          Margin="4,0,0,0"
+          HorizontalOptions="StartAndExpand"
+          BorderWidth="0" />
+
+                <Button
+          Grid.Column="2"
+          Text="＋"
+          Command="{Binding AddChildBlockCommand}"
+          FontSize="16"
+          HeightRequest="28"
+          WidthRequest="28"
+          BackgroundColor="Transparent"
+          TextColor="#a49cff"
+          Padding="0" />
+            </Grid>
+        </HorizontalStackLayout>
+
+        <CollectionView
+      ItemsSource="{Binding Children}"
+      IsVisible="{Binding IsExpanded}"
+      ItemsLayout="VerticalList"
+      SelectionMode="None"
+      Margin="12,0,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:BlockViewModel">
+                    <views:NavigationBlockView />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

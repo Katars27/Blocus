@@ -1,0 +1,75 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Blocus.ViewModels"
+             xmlns:views="clr-namespace:Blocus.Views"
+             x:Class="Blocus.Views.TrashBlockView"
+             x:DataType="vm:BlockViewModel"
+             BackgroundColor="#232334"
+             Padding="4,2">
+    <VerticalStackLayout>
+        <HorizontalStackLayout VerticalOptions="Center">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                <!-- Кнопка восстановления -->
+                <ImageButton
+                    Grid.Column="0"
+                    Command="{Binding RestoreCommand}"
+                    CommandParameter="{Binding Id}"
+                    Style="{StaticResource NavChevronStyle}"
+                    Source="restore_icon.png"
+                    WidthRequest="30" HeightRequest="24"
+                    BackgroundColor="Transparent" />
+
+                <!-- Название блока -->
+                <Button
+                    Grid.Column="1"
+                    Text="{Binding Title}"
+                    Command="{Binding OpenCommand}"
+                    BackgroundColor="Transparent"
+                    Style="{StaticResource NavListButtonStyle}"
+                    TextColor="{Binding IsSelected, Converter={StaticResource BoolToNavSelectedTextConverter}}"
+                    FontAttributes="{Binding IsSelected, Converter={StaticResource BoolToFontWeightConverter}}"
+                    Padding="8,4"
+                    Margin="15,0,0,0"
+                    HorizontalOptions="StartAndExpand"
+                    BorderWidth="0" />
+
+                <Label
+                    Grid.Column="2"
+                    Text="{Binding TimeUntilDeletion}"
+                    FontSize="12"
+                    TextColor="Gray"
+                    Margin="-50,0,15,4"/>
+
+                <!-- Кнопка удаления навсегда -->
+                <Button
+                    Grid.Column="3"
+                    Text="Удалить"
+                    Command="{Binding PermanentlyDeleteCommand}"
+                    CommandParameter="{Binding Id}"
+                    BackgroundColor="#F44336"
+                    TextColor="White"
+                    FontSize="16"
+                    HeightRequest="28"
+                    WidthRequest="28"
+                    Padding="0"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    CornerRadius="10" />
+            </Grid>
+        </HorizontalStackLayout>
+
+        <!-- Дочерние блоки, если есть -->
+        <CollectionView
+            ItemsSource="{Binding Children}"
+            IsVisible="{Binding IsExpanded}"
+            ItemsLayout="VerticalList"
+            SelectionMode="None"
+            Margin="12,0,0,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:BlockViewModel">
+                    <views:TrashBlockView />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

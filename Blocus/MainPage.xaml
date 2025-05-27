@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Blocus.MainPage"
+    x:Name="RootPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Blocus.Views"
+    xmlns:viewmodels="clr-namespace:Blocus.ViewModels"
+    BackgroundColor="#1e1e1e">
+
+    <Grid
+        RowDefinitions="Auto,*"
+        ColumnDefinitions="300,*"
+        BackgroundColor="#1e1e1e">
+
+        <!-- 1) Шапка -->
+        <Border
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            BackgroundColor="#232323"
+            HeightRequest="48"
+            Padding="24,0">
+            <HorizontalStackLayout
+                Spacing="12"
+                VerticalOptions="Center">
+
+                <!-- Логотип -->
+                <Image
+            Source="logo.png"
+            WidthRequest="28"
+            HeightRequest="28"
+            Aspect="AspectFit"
+            VerticalOptions="Center" />
+
+                <!-- Название -->
+                <Label
+            Text="Blocus"
+            FontSize="26"
+            FontAttributes="Bold"
+            VerticalOptions="Center"
+            TextColor="#bfaaff" />
+            </HorizontalStackLayout>
+        </Border>
+
+
+        <!-- 2) Сайдбар -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            BackgroundColor="#18181a"
+            Stroke="#242424"
+            StrokeThickness="1"
+            Padding="0,24,0,0">
+            <views:NavigationView
+                BindingContext="{Binding .}"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand" />
+        </Border>
+
+        <!-- 3) Центр: таб-бар + скроллируемый контент -->
+        <Grid
+            Grid.Row="1"
+            Grid.Column="1"
+            RowDefinitions="Auto,*"
+            BackgroundColor="#1e1e1e">
+
+            <!-- 3.1) Таб-бар -->
+            <CollectionView
+                Grid.Row="0"
+                ItemsSource="{Binding OpenTabs}"
+                SelectedItem="{Binding SelectedTab}"
+                SelectionMode="Single"
+                ItemsLayout="HorizontalList"
+                HeightRequest="40"
+                BackgroundColor="#2a2a35">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:BlockViewModel">
+                        <Frame
+                            Padding="8,4"
+                            CornerRadius="8"
+                            HasShadow="False"
+                            MinimumWidthRequest="100"
+                            BackgroundColor="Transparent"
+                            BorderColor="Transparent">
+
+                            <Frame.Triggers>
+                                <DataTrigger
+                                    TargetType="Frame"
+                                    Binding="{Binding IsSelected}"
+                                    Value="True">
+                                    <Setter Property="BackgroundColor" Value="#bfaaff"/>
+                                    <Setter Property="BorderColor" Value="#ffffff"/>
+                                </DataTrigger>
+                                <DataTrigger
+                                    TargetType="Frame"
+                                    Binding="{Binding IsSelected}"
+                                    Value="False">
+                                    <Setter Property="BackgroundColor" Value="Transparent"/>
+                                </DataTrigger>
+                            </Frame.Triggers>
+
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,4">
+                                <Label
+                                    Grid.Row="0" Grid.Column="0"
+                                    Text="{Binding Title}"
+                                    LineBreakMode="TailTruncation"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding IsSelected}"
+                                            Value="True">
+                                            <Setter Property="FontAttributes" Value="Bold"/>
+                                            <Setter Property="FontSize" Value="16"/>
+                                            <Setter Property="TextColor" Value="#232334"/>
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding IsSelected}"
+                                            Value="False">
+                                            <Setter Property="FontAttributes" Value="None"/>
+                                            <Setter Property="FontSize" Value="14"/>
+                                            <Setter Property="TextColor" Value="White"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Button
+                                    Grid.Row="0" Grid.Column="1"
+                                    Text="×"
+                                    WidthRequest="20"
+                                    HeightRequest="20"
+                                    Padding="0"
+                                    BackgroundColor="Transparent"
+                                    FontSize="13"
+                                    TextColor="White"
+                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.CloseTabCommand}"
+                                    CommandParameter="{Binding .}"
+                                    VerticalOptions="Start"
+                                    HorizontalOptions="End" />
+
+                                <BoxView
+                                    Grid.Row="1" Grid.ColumnSpan="2"
+                                    HeightRequest="4"
+                                    BackgroundColor="#ffffff"
+                                    IsVisible="{Binding IsSelected}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- 3.2) ВЕСЬ центральный контент скроллируется! -->
+            <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always" BackgroundColor="#19191c">
+                <views:BlockContentView BindingContext="{Binding SelectedTab}" />
+            </ScrollView>
+        </Grid>
+    </Grid>
+</ContentPage>

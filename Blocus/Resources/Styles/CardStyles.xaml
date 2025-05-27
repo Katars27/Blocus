@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Цвета -->
+    <Color x:Key="SurfaceColor">#25233b</Color>
+    <!-- Используй тот же, что и BackgroundColor во Frame для единства -->
+    <Color x:Key="SurfaceAltColor">#312F44</Color>
+    <Color x:Key="AccentColor">#A78BFA</Color>
+    <Color x:Key="ShadowColor">#000000</Color>
+    <Color x:Key="BorderColor">#2c2641</Color>
+
+    <!-- Стиль карточки -->
+    <Style x:Key="CardStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceColor}" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="WidthRequest" Value="350" />
+        <Setter Property="HeightRequest" Value="500" /> 
+        <Setter Property="HasShadow" Value="True" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="0,8,0,8" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{StaticResource ShadowColor}" Opacity="0.12" Offset="0,3" Radius="10"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
